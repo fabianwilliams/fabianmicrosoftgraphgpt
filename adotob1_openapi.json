@@ -1,0 +1,242 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Fabian GPT Action MicrosoftGraph API",
+      "version": "1.0"
+    },
+    "servers": [
+      {
+        "url": "https://graph.microsoft.com/v1.0"
+      }
+    ],
+    "paths": {
+      "/me": {
+        "get": {
+          "operationId": "getUserProfile",
+          "summary": "Get current user profile",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserProfile"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "OAuth2": []
+            }
+          ]
+        }
+      },
+      "/me/sendMail": {
+        "post": {
+          "operationId": "sendEmail",
+          "summary": "Send an email from the current user",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/Message"
+                    },
+                    "saveToSentItems": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Email sent successfully"
+            }
+          },
+          "security": [
+            {
+              "OAuth2": []
+            }
+          ]
+        }
+      },
+      "/me/messages": {
+        "get": {
+          "operationId": "readEmails",
+          "summary": "Read emails from the current user's inbox",
+          "parameters": [
+            {
+              "name": "top",
+              "in": "query",
+              "description": "The maximum number of messages to retrieve.",
+              "required": false,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "select",
+              "in": "query",
+              "description": "The specific fields to return in the response.",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/MessageItem"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "OAuth2": []
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "UserProfile": {
+          "type": "object",
+          "properties": {
+            "displayName": {
+              "type": "string"
+            },
+            "mail": {
+              "type": "string"
+            }
+          }
+        },
+        "Message": {
+          "type": "object",
+          "properties": {
+            "subject": {
+              "type": "string"
+            },
+            "body": {
+              "type": "object",
+              "properties": {
+                "contentType": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                }
+              }
+            },
+            "toRecipients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "emailAddress": {
+                    "type": "object",
+                    "properties": {
+                      "address": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "ccRecipients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "emailAddress": {
+                    "type": "object",
+                    "properties": {
+                      "address": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "MessageItem": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "receivedDateTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "subject": {
+              "type": "string"
+            },
+            "from": {
+              "type": "object",
+              "properties": {
+                "emailAddress": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "bodyPreview": {
+              "type": "string"
+            },
+            "hasAttachments": {
+              "type": "boolean"
+            },
+            "webLink": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "OAuth2": {
+          "type": "oauth2",
+          "flows": {
+            "authorizationCode": {
+              "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+              "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+              "scopes": {
+                "User.Read": "Read user profile",
+                "Mail.Send": "Send mail as a user",
+                "Mail.Read": "Read mail in user's mailbox"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
