@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-      "title": "Fabian GPT Action MicrosoftGraph API",
+      "title": "Fabian GPT Action MicrosoftGraph UserMail API",
       "version": "1.0"
     },
     "servers": [

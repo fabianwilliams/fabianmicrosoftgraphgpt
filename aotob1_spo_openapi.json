@@ -1,0 +1,99 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Fabian GPT Action MicrosoftGraph SPO API",
+      "version": "1.0"
+    },
+    "servers": [
+      {
+        "url": "https://graph.microsoft.com/v1.0"
+      }
+    ],
+    "paths": {
+      "/sites/{site-id}/lists/{list-id}/items": {
+        "get": {
+          "operationId": "getListItems",
+          "summary": "Get items from a SharePoint List",
+          "parameters": [
+            {
+              "name": "site-id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "The ID of the SharePoint site"
+            },
+            {
+              "name": "list-id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "The ID or name of the SharePoint list"
+            },
+            {
+              "name": "$filter",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Optional OData filter query"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ListItem"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "OAuth2": ["Sites.Read.All"]
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ListItem": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "OAuth2": {
+          "type": "oauth2",
+          "flows": {
+            "authorizationCode": {
+              "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+              "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+              "scopes": {
+                "Sites.Read.All": "Read items in all site collections"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
