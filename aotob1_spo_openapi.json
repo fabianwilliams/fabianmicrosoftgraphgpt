@@ -6,7 +6,7 @@
     },
     "servers": [
       {
-        "url": "https://graph.microsoft.com/v1.0"
+        "url": "https://aka.ms/fabs/graph/v1"
       }
     ],
     "paths": {
