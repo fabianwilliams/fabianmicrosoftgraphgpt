@@ -1,0 +1,63 @@
+{
+  "name": "Fabian GPT Action MicrosoftGraph UserMail API",
+  "version": "1.0",
+  "description": "Interact with Microsoft Graph to manage user mail.",
+  "auth": {
+    "type": "oauth2",
+    "flows": {
+      "authorizationCode": {
+        "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+        "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+        "scopes": {
+          "User.Read": "Read user profile",
+          "Mail.Send": "Send mail as a user",
+          "Mail.Read": "Read mail in user's mailbox"
+        }
+      }
+    }
+  },
+  "capabilities": [
+    {
+      "name": "Get User Profile",
+      "operation": "GET",
+      "path": "/me",
+      "authenticationRequired": true
+    },
+    {
+      "name": "Send Email",
+      "operation": "POST",
+      "path": "/me/sendMail",
+      "parameters": [
+        {
+          "name": "message",
+          "in": "body",
+          "required": true
+        },
+        {
+          "name": "saveToSentItems",
+          "in": "body",
+          "required": false
+        }
+      ],
+      "authenticationRequired": true
+    },
+    {
+      "name": "Read Emails",
+      "operation": "GET",
+      "path": "/me/messages",
+      "parameters": [
+        {
+          "name": "top",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "select",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "authenticationRequired": true
+    }
+  ]
+}
